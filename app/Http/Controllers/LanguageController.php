@@ -209,7 +209,13 @@ class LanguageController extends Controller {
             $defaultFile = base_path('resources/lang/en.json');
         }
 
-        $jsonFile = base_path("resources/lang/{$fileName}");
+        $langDir = base_path("resources/lang");
+        $jsonFile = "{$langDir}/{$fileName}";
+        
+        // Ensure the language directory exists
+        if (!File::isDirectory($langDir)) {
+            File::makeDirectory($langDir, 0755, true);
+        }
 
         if (!File::exists($jsonFile)) {
             if (File::exists($defaultFile)) {
@@ -263,7 +269,7 @@ class LanguageController extends Controller {
 
 
         $directory = dirname($jsonFile);
-        if (!File::exists($directory)) {
+        if (!File::isDirectory($directory)) {
             File::makeDirectory($directory, 0755, true);
         }
 
